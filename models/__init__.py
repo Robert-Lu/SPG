@@ -1,10 +1,10 @@
 from __future__ import  absolute_import
 
-from .resnet import *
-from .densenet import *
-from .vgg import *
-from .vggcoco import *
-from .deform import *
+# from .resnet import *
+# from .densenet import *
+# from .vgg import *
+# from .vggcoco import *
+# from .deform import *
 from .google import *
 
 # __factory = {

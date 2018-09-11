@@ -38,7 +38,7 @@ class SAVE_ATTEN(object):
 
     def save_top_5_pred_labels(self, preds, org_paths, global_step):
         img_num = np.shape(preds)[0]
-        for idx in xrange(img_num):
+        for idx in range(img_num):
             img_name = org_paths[idx].strip().split('/')[-1]
             if '.JPEG' in img_name:
                 img_id = img_name[:-5]
@@ -59,7 +59,7 @@ class SAVE_ATTEN(object):
         img_num = atten_batch.size()[0]
         # fid = open('imagenet_val_shape.txt', 'a')
         # print(np.shape(img_batch), np.shape(label_batch), np.shape(org_size_batch), np.shape(atten_batch))
-        for idx in xrange(img_num):
+        for idx in range(img_num):
             atten = atten_batch[idx]
             atten = atten.cpu().data.numpy()
             label = label_batch[idx]
@@ -67,9 +67,9 @@ class SAVE_ATTEN(object):
             self._save_masked_img(path_batch[idx], atten,label)
 
     def _get_idx2cate_dict(self, datasetname=None):
-        if datasetname not in idx2catename.keys():
-            print 'The given %s dataset category names are not available. The supported are: %s'\
-                  %(str(datasetname),','.join(idx2catename.keys()))
+        if datasetname not in list(idx2catename.keys()):
+            print('The given %s dataset category names are not available. The supported are: %s'\
+                  %(str(datasetname),','.join(list(idx2catename.keys()))))
             return None
         else:
             return {idx:cate_name for idx, cate_name in enumerate(idx2catename[datasetname])}
@@ -96,7 +96,7 @@ class SAVE_ATTEN(object):
 
         attention_map = atten[label,:,:]
         atten_norm = attention_map
-        print(np.shape(attention_map), 'Max:', np.max(attention_map), 'Min:',np.min(attention_map))
+        print((np.shape(attention_map), 'Max:', np.max(attention_map), 'Min:',np.min(attention_map)))
        # min_val = np.min(attention_map)
        # max_val = np.max(attention_map)
        # atten_norm = (attention_map - min_val)/(max_val - min_val)
@@ -124,7 +124,7 @@ class SAVE_ATTEN(object):
         :return:
         '''
         img_num = np.shape(atten_fuse_batch)[0]
-        for idx in xrange(img_num):
+        for idx in range(img_num):
             img_id = org_paths[idx].strip().split('/')[-1][:-4]
             for k in range(topk):
                 atten_pos = top_indices_batch[idx, k]
@@ -233,7 +233,7 @@ class SAVE_ATTEN(object):
     def read_img(self, img_path, size=(224,224)):
         img = cv2.imread(img_path)
         if img is None:
-            print "Image does not exist. %s" %(img_path)
+            print("Image does not exist. %s" %(img_path))
             exit(0)
 
         if size == (0,0):

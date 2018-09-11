@@ -33,7 +33,7 @@ class dataset(Dataset):
         return len(self.image_list)
 
     def __getitem__(self, idx):
-        img_name = os.path.join(self.root_dir, self.image_list[idx])
+        img_name = self.image_list[idx]
         image = Image.open(img_name).convert('RGB')
 
         if self.transform is not None:
@@ -70,7 +70,7 @@ class dataset(Dataset):
                 else:
                     line = line.strip().split()
                     image = line[0]
-                    labels = map(int, line[1:])
+                    labels = list(map(int, line[1:]))
             img_name_list.append(os.path.join(data_dir, image))
             img_labels.append(labels)
         return img_name_list, np.array(img_labels, dtype=np.float32)
@@ -147,7 +147,7 @@ class dataset_with_mask(Dataset):
                 else:
                     line = line.strip().split()
                     image = line[0]
-                    labels = map(int, line[1:])
+                    labels = list(map(int, line[1:]))
             img_name_list.append(os.path.join(data_dir, image))
             img_labels.append(labels)
         return img_name_list, np.array(img_labels, dtype=np.float32)
@@ -176,5 +176,5 @@ if __name__ == '__main__':
         img_mean[idx] = per_img_mean
         img_std[idx] = per_img_std
 
-    print np.mean(img_mean, axis=0), np.mean(img_std, axis=0)
+    print(np.mean(img_mean, axis=0), np.mean(img_std, axis=0))
 

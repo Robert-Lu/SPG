@@ -12,9 +12,9 @@ import shutil
 import json
 import collections
 import datetime
-import my_optim
+from exper import my_optim
 import torch.nn.functional as F
-from models import *
+from models import inception3_spg
 from torch.autograd import Variable
 from utils import AverageMeter
 from utils import Metrics
@@ -29,17 +29,17 @@ from utils.tensorboard import writer
 # elif os.uname()[1] == 'UTS2':
 #     ROOT_DIR = '/home/xiaolin/xlzhang/eccv18'
 
-ROOT_DIR = ''.join(os.getcwd().split('/')[:-1])
-print ROOT_DIR
+ROOT_DIR = "./../"
+print(ROOT_DIR)
 
 
 #SNAPSHOT_DIR = os.path.join(ROOT_DIR, 'snapshots', 'snapshot_bins')
 # IMG_DIR = os.path.join(ROOT_DIR, 'data', 'IMAGENET_VOC_3W', 'imagenet_simple')
 
-# IMG_DIR = os.path.join('/dev/shm/', 'IMAGENET_VOC_3W/imagenet_simple')
-# train_list = os.path.join(ROOT_DIR, 'data', 'IMAGENET_VOC_3W', 'list', 'train.txt')
-# test_list = os.path.join(ROOT_DIR, 'data', 'IMAGENET_VOC_3W', 'list', 'test.txt')
-
+IMG_DIR = os.path.join(ROOT_DIR, 'dataset', 'MEDICAL', 'lung')
+SNAPSHOT_DIR = os.path.join(ROOT_DIR, 'snapshot', 'MEDICAL', 'google')
+train_list = os.path.join(ROOT_DIR, 'dataset', 'MEDICAL', 'lung', 'list', 'train.txt')
+test_list = os.path.join(ROOT_DIR, 'dataset', 'MEDICAL', 'lung', 'list', 'test.txt')
 
 # Default parameters
 LR = 0.001
@@ -86,7 +86,7 @@ def save_checkpoint(args, state, is_best, filename='checkpoint.pth.tar'):
         shutil.copyfile(savepath, os.path.join(args.snapshot_dir, 'model_best.pth.tar'))
 
 def get_model(args):
-    model = eval(args.arch).model(pretrained=False,
+    model = inception3_spg.inception_v3(pretrained=False,
                                   num_classes=args.num_classes,
                                   threshold=args.threshold,
                                   args=args)
@@ -110,10 +110,10 @@ def train(args):
     model.train()
     train_loader, _ = data_loader(args)
 
-    with open(os.path.join(args.snapshot_dir, 'train_record.csv'), 'a') as fw:
-        config = json.dumps(vars(args), indent=4, separators=(',', ':'))
-        fw.write(config)
-        fw.write('#epoch,loss,pred@1,pred@5\n')
+    # with open(os.path.join(args.snapshot_dir, 'train_record.csv'), 'a') as fw:
+    #     config = json.dumps(vars(args), indent=4, separators=(',', ':'))
+    #     fw.write(config)
+    #     fw.write('#epoch,loss,pred@1,pred@5\n')
 
 
     total_epoch = args.epoch
@@ -199,8 +199,8 @@ def train(args):
 
 if __name__ == '__main__':
     args = get_arguments()
-    print 'Running parameters:\n'
-    print json.dumps(vars(args), indent=4, separators=(',', ':'))
+    print('Running parameters:\n')
+    print(json.dumps(vars(args), indent=4, separators=(',', ':')))
     if not os.path.exists(args.snapshot_dir):
-        os.mkdir(args.snapshot_dir)
+        os.makedirs(args.snapshot_dir)
     train(args)

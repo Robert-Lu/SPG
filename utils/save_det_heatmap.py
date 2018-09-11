@@ -44,7 +44,7 @@ def save_atten(imgpath, atten, num_classes=20, base_dir='../save_bins/', idx_bas
 
 def save_cls_scores(img_path, scores, base_dir='../save_bins/'):
     scores = np.squeeze(scores).tolist()
-    score_str = map(lambda x:'%.4f'%(x), scores)
+    score_str = ['%.4f'%(x) for x in scores]
 
     with open(os.path.join(base_dir, 'scores.txt'), 'a') as fw:
         out_str = get_imgId(img_path) + ' ' + ' '.join(score_str) + '\n'

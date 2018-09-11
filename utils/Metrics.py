@@ -32,8 +32,8 @@ def get_mAP(gt_labels, pred_scores):
         res = metrics.average_precision_score(gt_labels[:,i], pred_scores[:,i])
         results.append(res)
 
-    results = map(lambda x: '%.3f'%(x), results)
-    cls_map = np.array(map(float, results))
+    results = ['%.3f'%(x) for x in results]
+    cls_map = np.array(list(map(float, results)))
     return cls_map
 
 def get_AUC(gt_labels, pred_scores):
