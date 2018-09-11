@@ -35,14 +35,17 @@ class dataset(Dataset):
     def __getitem__(self, idx):
         img_name = self.image_list[idx]
         image = Image.open(img_name).convert('RGB')
+        msk_name = self.label_list[idx]
+        mask = Image.open(msk_name).convert('RGB')
 
         if self.transform is not None:
             image = self.transform(image)
+            mask = self.transform(mask)
 
         if self.with_path:
-            return img_name, image, self.label_list[idx]
+            return img_name, image, mask
         else:
-            return image, self.label_list[idx]
+            return image, mask
 
     def read_labeled_image_list(self, data_dir, data_list):
         """
@@ -57,23 +60,25 @@ class dataset(Dataset):
         """
         f = open(data_list, 'r')
         img_name_list = []
-        img_labels = []
+        msk_name_list = []
         for line in f:
             if ';' in line:
                 image, labels = line.strip("\n").split(';')
             else:
-                if len(line.strip().split()) == 2:
-                    image, labels = line.strip().split()
-                    if '.' not in image:
-                        image += '.jpg'
-                    labels = int(labels)
-                else:
-                    line = line.strip().split()
-                    image = line[0]
-                    labels = list(map(int, line[1:]))
+                image, labels = line.strip("\n").split()
+            # else:
+            #     if len(line.strip().split()) == 2:
+            #         image, labels = line.strip().split()
+            #         if '.' not in image:
+            #             image += '.jpg'
+            #         labels = int(labels)
+            #     else:
+            #         line = line.strip().split()
+            #         image = line[0]
+            #         labels = list(map(int, line[1:]))
             img_name_list.append(os.path.join(data_dir, image))
-            img_labels.append(labels)
-        return img_name_list, np.array(img_labels, dtype=np.float32)
+            msk_name_list.append(os.path.join(data_dir, labels))
+        return img_name_list, msk_name_list
 
 def get_name_id(name_path):
     name_id = name_path.strip().split('/')[-1]

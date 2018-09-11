@@ -57,8 +57,8 @@ def get_arguments():
     parser.add_argument("--test_list", type=str,
                         default=test_list)
     parser.add_argument("--batch_size", type=int, default=20)
-    parser.add_argument("--input_size", type=int, default=356)
-    parser.add_argument("--crop_size", type=int, default=321)
+    parser.add_argument("--input_size", type=int, default=256)
+    parser.add_argument("--crop_size", type=int, default=224)
     parser.add_argument("--dataset", type=str, default='imagenet')
     parser.add_argument("--num_classes", type=int, default=20)
     parser.add_argument("--threshold", type=float, default=0.6)

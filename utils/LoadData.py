@@ -19,8 +19,8 @@ def data_loader(args, test_path=False, segmentation=False):
     crop_size = int(args.crop_size)
 
     tsfm_train = transforms.Compose([transforms.Resize(input_size),  #356
-                                     transforms.RandomCrop(crop_size), #321
-                                     transforms.RandomHorizontalFlip(),
+                                     # transforms.RandomCrop(crop_size), #321
+                                     # transforms.RandomHorizontalFlip(),
                                      transforms.ToTensor(),
                                      transforms.Normalize(mean_vals, std_vals)
                                      ])
@@ -45,6 +45,12 @@ def data_loader(args, test_path=False, segmentation=False):
         func_transforms.append(transforms.Normalize(mean_vals, std_vals))
 
     tsfm_test = transforms.Compose(func_transforms)
+
+    # img_train = my_dataset(args.train_list, root_dir=args.img_dir,
+    #                        transform=None, with_path=True)
+    #
+    # img_test = my_dataset(args.test_list, root_dir=args.img_dir,
+    #                       transform=None, with_path=test_path)
 
     img_train = my_dataset(args.train_list, root_dir=args.img_dir,
                            transform=tsfm_train, with_path=True)
